@@ -33,7 +33,7 @@ class User(db.Model):
     signs = db.relationship("Sign", backref="user", cascade="all")  # 查看所有的签到记录
     codes = db.relationship("Code", backref="user", cascade="all")  # 查看所有提交的代码
     courses = db.relationship('Course', secondary=UserCourseRelation, back_populates='users', cascade="all")
-    pronlems = db.relationship('Problem', secondary=UserProblemRelation, back_populates='users', cascade="all")
+    problems = db.relationship('Problem', secondary=UserProblemRelation, back_populates='users', cascade="all")
     projects = db.relationship('Project', secondary=UserProjectRelation, back_populates='users', cascade="all")
 
 
@@ -41,9 +41,9 @@ class User(db.Model):
 class Course(db.Model):
     __tablename__ = "course"
     course_id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.Integer, nullable=False)
     title = db.Column(db.String(255))
     details = db.Column(db.Text)
+    users = db.relationship('User', secondary=UserCourseRelation, back_populates='courses', cascade="all")
 
 
 # 题目表
@@ -53,6 +53,7 @@ class Problem(db.Model):
     level = db.Column(db.Integer, nullable=False)
     details = db.Column(db.Text)
     hint = db.Column(db.Text)
+    users = db.relationship('User', secondary=UserProblemRelation, back_populates='problems', cascade="all")
 
 
 # 项目表
@@ -61,6 +62,7 @@ class Project(db.Model):
     project_id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Integer, nullable=False)
     details = db.Column(db.String(255))
+    users = db.relationship('User', secondary=UserProjectRelation, back_populates='projects', cascade="all")
 
 
 # 管理员表
