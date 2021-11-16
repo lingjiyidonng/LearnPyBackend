@@ -7,10 +7,10 @@ SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/learnpy?charset=ut
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # APPID
-appID = ""
+appID = "wxe59370495392112c"
 
 # SECRET
-SECRET = ""
+SECRET = "d3249fe2e320c5dec19632f2616b8902"
 
 # 密钥设置
 SECRET_KEY = "SecretKey"

@@ -34,3 +34,7 @@ def getUserId():
     token = request.headers.get('Authorization').split(" ")[1]
     data = checkToken(token)
     return data["user_id"]
+
+
+if __name__ == '__main__':
+    print(getToken(1))

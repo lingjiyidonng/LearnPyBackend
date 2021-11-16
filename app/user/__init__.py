@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
 from app.model.response import Error1001
-from app.utils.jwt import checkToken
+from app.utils.jwtutils import checkToken
 
 user = Blueprint('user', __name__)
 
 
 # token验证
 @user.before_request
-def checkStaffToken():
+def checkUserToken():
     # 非登录接口需要请求头的token认证
     if request.path != "/user/login":
         authorization = request.headers.get('Authorization')
@@ -29,3 +29,4 @@ def checkStaffToken():
 
 
 import app.user.login
+import app.user.course

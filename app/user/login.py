@@ -2,7 +2,7 @@ import app.setting
 from app.user import user
 from flask import request, jsonify
 from app.model.dbmodel import *
-from app.utils.jwt import getToken
+from app.utils.jwtutils import getToken
 from app.model.response import *
 import requests
 
@@ -28,7 +28,7 @@ def userLogin():
 
     user = User.query.filter_by(OpenID=openID).first()
     if user is None:
-        user = User(OpenID=openID, sessionKey=session_key)
+        user = User(openid=openID)
         db.session.add(user)
         db.session.commit()
 
