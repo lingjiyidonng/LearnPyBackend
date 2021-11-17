@@ -31,3 +31,4 @@ def checkUserToken():
 import app.user.login
 import app.user.course
 import app.user.problem
+import app.user.sign
