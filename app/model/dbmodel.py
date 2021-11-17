@@ -1,4 +1,5 @@
 from app.extension import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 UserCourseRelation = db.Table(
@@ -53,6 +54,7 @@ class Problem(db.Model):
     level = db.Column(db.Integer, nullable=False)
     details = db.Column(db.Text)
     hint = db.Column(db.Text)
+    reference_code = db.Column(db.Text)
     users = db.relationship('User', secondary=UserProblemRelation, back_populates='problems', cascade="all")
 
 
@@ -70,7 +72,21 @@ class Admin(db.Model):
     __tablename__ = "admin"
     admin_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    password = db.Column(db.String(255), nullable=False)
+
+    # 密码安全部分
+    password_hash = db.Column(db.String(100))
+
+    @property
+    def password(self):
+        raise AttributeError("密码不允许读取")
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # 检查密码
+    def checkPassword(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 # 代码表
