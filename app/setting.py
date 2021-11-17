@@ -1,16 +1,16 @@
 import os
 
 # MySQL数据库连接
-SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/boba?charset=utf8"
+SQLALCHEMY_DATABASE_URI = "mysql://root:123456@127.0.0.1:3306/learnpy?charset=utf8"
 
 # 数据库追踪关闭
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # APPID
-appID = ""
+appID = "wx1b64559ad594f9dc"
 
 # SECRET
-SECRET = ""
+SECRET = "a44e46d5173f3c18734600b5a2158652"
 
 # 密钥设置
 SECRET_KEY = "SecretKey"
