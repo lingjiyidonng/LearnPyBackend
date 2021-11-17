@@ -51,9 +51,12 @@ def userSolveProblem():
     problem = Problem.query.get(problemId)
     if problem is None:
         return jsonify(Error1002())
-    user.problems.append(problem)
-    db.session.commit()
-    return jsonify(OK())
+    if problem not in user.problems:
+        user.problems.append(problem)
+        db.session.commit()
+        return jsonify(OK())
+    else:
+        return jsonify(Error1002())
 
 
 @user.route("/problem/solve", methods=["DELETE"])
@@ -68,8 +71,9 @@ def userUnSolveProblem():
         return jsonify(Error1002())
     if problem.problem_id in [problem_.problem_id for problem_ in user.problems]:
         user.problems.remove(problem)
+        db.session.commit()
+        return jsonify(OK())
     else:
         return jsonify(Error1002())
-    db.session.commit()
-    return jsonify(OK())
+
 
