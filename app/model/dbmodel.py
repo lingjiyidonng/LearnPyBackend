@@ -1,3 +1,5 @@
+import datetime
+
 from app.extension import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -62,8 +64,9 @@ class Problem(db.Model):
 class Project(db.Model):
     __tablename__ = "project"
     project_id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.Integer, nullable=False)
-    details = db.Column(db.String(255))
+    type = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255))
+    url = db.Column(db.String(255))
     users = db.relationship('User', secondary=UserProjectRelation, back_populates='projects', cascade="all")
 
 
@@ -94,10 +97,13 @@ class Code(db.Model):
     __tablename__ = "code"
     code_id = db.Column(db.Integer, primary_key=True)
     is_show = db.Column(db.Boolean, default=False)
-    code_details = db.Column(db.Text)
+    is_commit = db.Column(db.Boolean, default=False)
+    codepath = db.Column(db.String(255))
+    describe = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     course_id = db.Column(db.Integer)
     problem_id = db.Column(db.Integer)
+    dt = db.Column(db.DateTime, default=datetime.datetime.now())
 
 
 

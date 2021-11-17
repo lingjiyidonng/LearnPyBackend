@@ -20,6 +20,7 @@ def userGetCourseList():
 
 @user.route("/course", methods=["GET"])
 def userGetCourse():
+    user = User.query.get(getUserId())
     courseId = request.args.get("courseid")
     if courseId is None:
         return jsonify(Error1002())
@@ -31,7 +32,8 @@ def userGetCourse():
             "courseid": course.course_id,
             "title": course.title,
             # http://127.0.0.1:5000/file/download/courses/1.md
-            "coursedetail": "http://" + current_app.config['HOST'] + "/file/download/courses/" + course.details
+            "coursedetail": "http://" + current_app.config['HOST'] + "/file/download/courses/" + course.details,
+            "is_collect": True if course in user.courses else False
         }
     ))
 
@@ -46,9 +48,12 @@ def userCollectCourse():
     course = Course.query.get(courseId)
     if course is None:
         return jsonify(Error1002())
-    user.courses.append(course)
-    db.session.commit()
-    return jsonify(OK())
+    if course not in user.courses:
+        user.courses.append(course)
+        db.session.commit()
+        return jsonify(OK())
+    else:
+        return jsonify(Error1002())
 
 
 @user.route("/course/collect", methods=["DELETE"])
@@ -63,7 +68,7 @@ def userUnCollectCourse():
         return jsonify(Error1002())
     if course in user.courses:
         user.courses.remove(course)
+        db.session.commit()
+        return jsonify(OK())
     else:
         return jsonify(Error1002())
-    db.session.commit()
-    return jsonify(OK())

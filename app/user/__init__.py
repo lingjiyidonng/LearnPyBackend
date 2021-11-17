@@ -31,4 +31,7 @@ def checkUserToken():
 import app.user.login
 import app.user.course
 import app.user.problem
+import app.user.project
 import app.user.sign
+import app.user.code
+import app.user.home

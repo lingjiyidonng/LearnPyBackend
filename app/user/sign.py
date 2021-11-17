@@ -27,8 +27,9 @@ def userSign():
     res = []
     for day in datelist:
         temp = {
-           "date": day.strftime("%Y-%m-%d %a"),
-           "is_sign": False
+            "date": day.strftime("%d"),
+            "week": day.strftime("%a"),
+            "is_sign": False
         }
         if Sign.query.filter_by(user_id=user.user_id, date=day).first() is not None:
            temp["is_sign"] = True
