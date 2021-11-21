@@ -39,6 +39,7 @@ def userCodeList():
         codes=[
             {
                 "codeid": code.code_id,
+                "describe": code.describe,
                 "dt": code.dt
             }
         for code in user.codes]

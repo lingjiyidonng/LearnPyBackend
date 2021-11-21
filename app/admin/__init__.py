@@ -28,3 +28,8 @@ def checkAdminToken():
             return jsonify(Error1001())
 
 import app.admin.login
+import app.admin.course
+import app.admin.problem
+import app.admin.code
+import app.admin.project
+import app.admin.user

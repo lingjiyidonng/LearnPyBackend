@@ -1,3 +1,5 @@
+import random
+
 from app.user import user
 from flask import request, jsonify, current_app
 from app.model.response import *
@@ -40,3 +42,31 @@ def userSign():
     ))
 
 
+@user.route("/home/problem/random")
+def userRandomProblem():
+    user = User.query.get(getUserId())
+    problemNum = Problem.query.count()
+    problemRandId = random.randint(1, problemNum)
+    problem = Problem.query.get(problemRandId)
+    return jsonify(OK(
+        problem={
+            "problemid": problem.problem_id,
+            "level": problem.level,
+            "is_solve": True if problem in user.problems else False
+        }
+    ))
+
+
+
+@user.route("/home/project/random")
+def userRandomProject():
+    projectNum = Project.query.count()
+    projectRandId = random.randint(1, projectNum)
+    project = Project.query.get(projectRandId)
+    return jsonify(OK(
+        project={
+            "projectid": project.project_id,
+            "name": project.name,
+            "url": project.url
+        }
+    ))

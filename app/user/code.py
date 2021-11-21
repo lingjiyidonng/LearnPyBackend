@@ -59,6 +59,7 @@ def userGetCode():
         code={
             "codeid": code.code_id,
             "codefile": "http://" + current_app.config['HOST'] + "/file/download/" + code.codepath,
+            "describe": code.describe,
             "is_commit": code.is_commit,
             "is_show": code.is_show,
             "dt": code.dt

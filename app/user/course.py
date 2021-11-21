@@ -7,12 +7,14 @@ from app.utils.jwtutils import *
 
 @user.route("/course/getlist", methods=["GET"])
 def userGetCourseList():
+    user = User.query.get(getUserId())
     courseList = Course.query.all()
     return jsonify(OK(
         courselist=[
             {
                 "courseid": course.course_id,
-                "title": course.title
+                "title": course.title,
+                "is_collect": True if course in user.courses else False
             }
         for course in courseList]
     ))
@@ -35,6 +37,23 @@ def userGetCourse():
             "coursedetail": "http://" + current_app.config['HOST'] + "/file/download/courses/" + course.details,
             "is_collect": True if course in user.courses else False
         }
+    ))
+
+
+@user.route("/course/code")
+def userGetCourseCode():
+    courseId = request.args.get("courseid")
+    codeList = Code.query.filter_by(course_id=courseId, is_show=True).all()
+    return jsonify(OK(
+        codelist=[
+            {
+                "codeid": code.code_id,
+                "describe": code.describe,
+                "username": code.user.user_name,
+                "avatar": code.user.avatar,
+                "dt": code.dt
+            }
+        for code in codeList]
     ))
 
 

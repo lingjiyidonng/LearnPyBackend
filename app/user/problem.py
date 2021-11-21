@@ -41,6 +41,23 @@ def userGetProblem():
     ))
 
 
+@user.route("/problem/code")
+def userGetProblemCode():
+    problemId = request.args.get("problemid")
+    codeList = Code.query.filter_by(problem_id=problemId, is_show=True).all()
+    return jsonify(OK(
+        codelist=[
+            {
+                "codeid": code.code_id,
+                "describe": code.describe,
+                "username": code.user.user_name,
+                "avatar": code.user.avatar,
+                "dt": code.dt
+            }
+        for code in codeList]
+    ))
+
+
 @user.route("/problem/solve", methods=["POST"])
 def userSolveProblem():
     userId = getUserId()
