@@ -8,9 +8,15 @@ import requests
 
 
 # 登录
-@user.route("/login", methods=["GET"])
+@user.route("/login", methods=["POST"])
 def userLogin():
-    code = request.args.get("code")
+    code = request.json.get("code")
+    # avatar = request.json.get("avatar")
+    # username = request.json.get("username")
+    if code is None:
+        return jsonify(Error1002())
+    print(code)
+
     appID = app.setting.appID  # 开发者关于微信小程序的appID
     appSecret = app.setting.SECRET  # 开发者关于微信小程序的appSecret
     req_params = {
@@ -23,14 +29,17 @@ def userLogin():
     response_data = requests.get(wx_login_api, params=req_params)  # 向API发起GET请求
     data = response_data.json()
     print(data)
-    openID = data['openid']  # 得到用户关于当前小程序的OpenID
-    session_key = data['session_key']  # 得到用户关于当前小程序的会话密钥session_key
-
-    user = User.query.filter_by(OpenID=openID).first()
+    openID = data.get('openid')  # 得到用户关于当前小程序的OpenID
+    # session_key = data['session_key']  # 得到用户关于当前小程序的会话密钥session_key
+    if openID is None:
+        return jsonify(Error1001())
+    user = User.query.filter_by(openid=openID).first()
     if user is None:
-        user = User(openid=openID)
+        user = User(openid=openID, user_name="temp")
         db.session.add(user)
         db.session.commit()
+    if user.ban == True:
+        return jsonify(Error1001())
 
-    token = getToken(userId=user.id)
+    token = getToken(userId=user.user_id)
     return jsonify(OK(token=token))

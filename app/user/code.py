@@ -23,7 +23,7 @@ def userRunCode():
     codeHandler.run()
     return jsonify(OK(
         codeid=code.code_id,
-        res=[r for r in codeHandler.res]
+        res=[r.strip() for r in codeHandler.res]
     ))
 
 
@@ -34,10 +34,13 @@ def userCommitCode():
     courseId = request.json.get("courseid")
     problemId = request.json.get("problemid")
     describe = request.json.get("describe")
+    username = request.json.get("username")
+    avatar = request.json.get("avatar")
     code = Code.query.get(codeId)
     course = Course.query.get(courseId)
     problem = Problem.query.get(problemId)
-    if code is None or (course is None and problem is None) or (course is not None and problem is not None):
+    if code is None or (course is None and problem is None) or (course is not None and problem is not None)\
+            or username is None or avatar is None:
         return jsonify(Error1002())
     if course:
         code.course_id = course.course_id
@@ -45,6 +48,8 @@ def userCommitCode():
         code.problem_id = problem.problem_id
     code.is_commit = True
     code.describe = describe
+    user.avatar = avatar
+    user.user_name = username
     db.session.commit()
     return jsonify(OK(codeid=code.code_id))
 
@@ -59,6 +64,7 @@ def userGetCode():
         code={
             "codeid": code.code_id,
             "codefile": "http://" + current_app.config['HOST'] + "/file/download/" + code.codepath,
+            "describe": code.describe,
             "is_commit": code.is_commit,
             "is_show": code.is_show,
             "dt": code.dt
