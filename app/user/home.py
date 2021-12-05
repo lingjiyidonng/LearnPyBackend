@@ -5,8 +5,8 @@ from app.model.dbmodel import *
 from app.utils.jwtutils import *
 
 
-@user.route("/home/course", methods=["GET"])
-def userCourseList():
+@user.route("/home/courses", methods=["GET"])
+def userCoursesList():
     user = User.query.get(getUserId())
     return jsonify(OK(
         courses=[
@@ -18,8 +18,8 @@ def userCourseList():
     ))
 
 
-@user.route("/home/project", methods=["GET"])
-def userProjectList():
+@user.route("/home/projects", methods=["GET"])
+def userProjectsList():
     user = User.query.get(getUserId())
     return jsonify(OK(
         projects=[
