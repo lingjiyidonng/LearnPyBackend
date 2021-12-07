@@ -20,6 +20,11 @@ def fileUpload():
     if file is not None:
         file.filename = random_filename(str(datetime.now().timestamp()) + os.path.splitext(file.filename)[1])
         file.save(os.path.join(current_app.config['UPLOAD_PATH'], file.filename))
+    else:
+        return jsonify({
+            "status": 1002,
+            "msg": "没有上传文件"
+        })
     return jsonify(OK(
         url="http://" + HOST + "/file/download/" + file.filename,
         filename=file.filename

@@ -8,6 +8,7 @@ from app.utils.jwtutils import *
 import os
 from app.setting import UPLOAD_PATH
 from app.utils.codeutils import *
+import datetime
 
 
 @user.route("/code/run", methods=["POST"])
@@ -16,6 +17,14 @@ def userRunCode():
     codeFile = request.json.get("codefile")
     if codeFile is None or os.path.exists(os.path.join(UPLOAD_PATH, codeFile)) is None:
         return jsonify(Error1002())
+
+    # codeCommitCount = Code.query.filter(
+    #     Code.user_id == user.user_id,
+    #     datetime.datetime.now() - Code.dt <= datetime.timedelta(1/24/60)
+    # ).count()
+    # if codeCommitCount > 3:
+    #     return jsonify(Error1002())
+
     code = Code(codepath=codeFile, user_id=user.user_id)
     db.session.add(code)
     db.session.commit()
@@ -23,7 +32,7 @@ def userRunCode():
     codeHandler.run()
     return jsonify(OK(
         codeid=code.code_id,
-        res=[r.strip() for r in codeHandler.res]
+        res=codeHandler.res
     ))
 
 
